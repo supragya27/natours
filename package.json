@@ -1,0 +1,25 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supragya27/natours.git"
+  },
+  "author": "Supragya Chauhan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/supragya27/natours/issues"
+  },
+  "homepage": "https://github.com/supragya27/natours#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
