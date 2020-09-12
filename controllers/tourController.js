@@ -11,31 +11,29 @@ exports.aliasTopTours = (req, res, next) => {
 };
 
 
-exports.getAllTours = async (req, res) => {
-  try {
-    //execute query
+exports.getAllTours = catchAsync(async (req, res) => {
 
-    const features = new APIFeatures(Tour.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+  const features = new APIFeatures(Tour.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    const tours = await features.query;
-    res.status(200).json({
-      status: 'success',
-      results: tours.length,
-      data: {
-        tours,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  const tours = await features.query;
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
+
+  res.status(404).json({
+    status: 'fail',
+    message: err,
+  });
+
+});
 
 exports.getTour = catchAsync(async (req, res, next) => {
 
