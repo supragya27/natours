@@ -1,7 +1,8 @@
+const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
 const AppError = require('../utils/appError')
-const User = require('./../models/userModel')
 const catchAsync = require('./../utils/catchAsync')
+const User = require('./../models/userModel')
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.SECRET, {
@@ -37,9 +38,9 @@ exports.login = catchAsync(async (req, res, next) => {
 
     //check if email and password are correct
     const user = await User.findOne({ email }).select('+password')
-    console.log(user)
+    //console.log(user)
     if (!user || !(await user.correctPassword(password, user.password)))
-        return next(new AppError('Incorrect email andor password', 401))
+        return next(new AppError('Incorrect email and/or password', 401))
 
     //send back token
     const token = signToken(user._id);
@@ -48,4 +49,38 @@ exports.login = catchAsync(async (req, res, next) => {
         token
     })
 
+})
+
+exports.protect = catchAsync(async (req, res, next) => {
+    //get token, check if it's there
+    let token;
+    if (req.headers.authorization &&
+        req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1]
+    }
+
+    if (!token) {
+        return next(new AppError('You are not logged in!', 401))
+    }
+
+    //token verification
+    const decoded = await promisify(jwt.verify)(token, process.env.SECRET)
+    console.log(decoded)
+
+    //check user existance
+    const freshUser = await User.findById(decoded.id);
+    if (!freshUser) {
+        return next(new AppError(
+            'The user no longer exists', 401
+        ))
+    }
+
+    //if user changed password after jwt is issued
+    if (freshUser.changedPasswordAfter(decoded.iat)) {
+        return next(new AppError('Password changed recently! Please login again.', 401))
+
+        req.user = freshUser
+    }
+
+    next()
 })
