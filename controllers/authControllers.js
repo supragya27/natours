@@ -15,7 +15,9 @@ exports.signup = catchAsync(async (req, res, next) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm
+        passwordConfirm: req.body.passwordConfirm,
+        passwordChangedAt: req.body.passwordChangedAt,
+        role: req.body.role
     })
 
     const token = signToken(newUser._id)
@@ -79,8 +81,17 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (freshUser.changedPasswordAfter(decoded.iat)) {
         return next(new AppError('Password changed recently! Please login again.', 401))
 
-        req.user = freshUser
     }
 
+    req.user = freshUser
     next()
 })
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(new AppError('You do not have the permission to perform this action', 403))
+        }
+        next()
+    }
+}
