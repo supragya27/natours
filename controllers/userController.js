@@ -11,7 +11,10 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj
 }
 
-exports.getAllUsers = factory.getAll(User)
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id
+  next()
+}
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //create error if user tries to update password
@@ -53,3 +56,4 @@ exports.createUser = (req, res) => {
 //not for updating passwords
 exports.updateUser = factory.updateOne(User)
 exports.deleteUser = factory.deleteOne(User)
+exports.getAllUsers = factory.getAll(User)
