@@ -6,7 +6,7 @@ const helmet = require('helmet')
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
-const csp = require('express-csp');    
+const cookieParser = require('cookie-parser');    
 
 const errorController = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
@@ -45,56 +45,6 @@ app.use(
  })
  );
 
-// csp.extend(app, {
-//   policy: {
-//     directives: {
-//       'default-src': ['self'],
-//       'style-src': ['self', 'unsafe-inline', 'https://fonts.googleapis.com'],
-//       'font-src': ['self', 'https://fonts.gstatic.com'],
-//       'script-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data',
-//         'blob',
-//         'https://js.stripe.com',
-//         'https://api.mapbox.com',
-//       ],
-//       'worker-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://js.stripe.com',
-//         'https://api.mapbox.com',
-//       ],
-//       'frame-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://js.stripe.com',
-//         'https://api.mapbox.com',
-//       ],
-//       'img-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://js.stripe.com',
-//         'https://api.mapbox.com',
-//       ],
-//       'connect-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://api.mapbox.com',
-//         'https://events.mapbox.com',
-//       ],
-//     },
-//   },
-// });
-
 //dev logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -110,6 +60,7 @@ app.use('/api', limiter)
 
 //body parser:reading data from body to req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //data sanitization against NoSQL query injection
 app.use(mongoSanitize())
@@ -122,8 +73,15 @@ app.use(hpp({
   whitelist: ['duration', 'maxGroupSize', 'ratingsAverage', 'ratingsQuantity', 'difficulty', 'price']
 }
 ))
-//routes
 
+//test middleware
+app.use((req,res,next)=>{
+  req.requestTime=new Date().toISOString()
+  console.log(req.cookies);
+  next()
+})
+
+//routes
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
