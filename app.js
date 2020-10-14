@@ -29,55 +29,71 @@ app.use(express.static(path.join(__dirname, 'public')));
 //set security http headers
 app.use(helmet())
 
-csp.extend(app, {
-  policy: {
-    directives: {
-      'default-src': ['self'],
-      'style-src': ['self', 'unsafe-inline', 'https://fonts.googleapis.com'],
-      'font-src': ['self', 'https://fonts.gstatic.com'],
-      'script-src': [
-        'self',
-        'unsafe-inline',
-        'data',
-        'blob',
-        'https://js.stripe.com',
-        'https://api.mapbox.com',
-      ],
-      'worker-src': [
-        'self',
-        'unsafe-inline',
-        'data:',
-        'blob:',
-        'https://js.stripe.com',
-        'https://api.mapbox.com',
-      ],
-      'frame-src': [
-        'self',
-        'unsafe-inline',
-        'data:',
-        'blob:',
-        'https://js.stripe.com',
-        'https://api.mapbox.com',
-      ],
-      'img-src': [
-        'self',
-        'unsafe-inline',
-        'data:',
-        'blob:',
-        'https://js.stripe.com',
-        'https://api.mapbox.com',
-      ],
-      'connect-src': [
-        'self',
-        'unsafe-inline',
-        'data:',
-        'blob:',
-        'https://api.mapbox.com',
-        'https://events.mapbox.com',
-      ],
-    },
-  },
-});
+app.use(
+  helmet.contentSecurityPolicy({
+  directives: {
+  defaultSrc: ["'self'", 'https:', 'http:','data:', 'ws:'],
+  baseUri: ["'self'"],
+  fontSrc: ["'self'", 'https:','http:', 'data:'],
+  scriptSrc: [
+ "'self'",
+ 'https:',
+ 'http:',
+ 'blob:'],
+  styleSrc: ["'self'", 'https:', 'http:','unsafe-inline']
+ }
+ })
+ );
+
+// csp.extend(app, {
+//   policy: {
+//     directives: {
+//       'default-src': ['self'],
+//       'style-src': ['self', 'unsafe-inline', 'https://fonts.googleapis.com'],
+//       'font-src': ['self', 'https://fonts.gstatic.com'],
+//       'script-src': [
+//         'self',
+//         'unsafe-inline',
+//         'data',
+//         'blob',
+//         'https://js.stripe.com',
+//         'https://api.mapbox.com',
+//       ],
+//       'worker-src': [
+//         'self',
+//         'unsafe-inline',
+//         'data:',
+//         'blob:',
+//         'https://js.stripe.com',
+//         'https://api.mapbox.com',
+//       ],
+//       'frame-src': [
+//         'self',
+//         'unsafe-inline',
+//         'data:',
+//         'blob:',
+//         'https://js.stripe.com',
+//         'https://api.mapbox.com',
+//       ],
+//       'img-src': [
+//         'self',
+//         'unsafe-inline',
+//         'data:',
+//         'blob:',
+//         'https://js.stripe.com',
+//         'https://api.mapbox.com',
+//       ],
+//       'connect-src': [
+//         'self',
+//         'unsafe-inline',
+//         'data:',
+//         'blob:',
+//         'https://api.mapbox.com',
+//         'https://events.mapbox.com',
+//       ],
+//     },
+//   },
+// });
 
 //dev logging
 if (process.env.NODE_ENV === 'development') {
