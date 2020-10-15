@@ -190,3 +190,29 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     //log the user in(JWT)
     createSendToken(user, 200, res)
 })
+
+//only for rendered pages, has no errors
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+   
+    if(req.cookies.jwt){
+       const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.SECRET)
+
+
+    //check user existance
+    const freshUser = await User.findById(decoded.id);
+    if (!freshUser) {
+        return next()
+    }
+
+    //if user changed password after jwt is issued
+    if (freshUser.changedPasswordAfter(decoded.iat)) {
+        return next()
+
+    }
+
+    //if there is a logged in user
+    res.locals.user=freshUser
+    return next()
+}
+next()
+})
