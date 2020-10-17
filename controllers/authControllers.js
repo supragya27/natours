@@ -67,6 +67,14 @@ exports.login = catchAsync(async (req, res, next) => {
 
 })
 
+exports.logout=(req,res)=>{
+    res.cookie('jwt','loggedout',{
+        expires: new Date(Date.now()+10000),
+        httpOnly:true
+    })
+    res.status(200).json({status:'success'})
+}
+
 exports.protect = catchAsync(async (req, res, next) => {
     //get token, check if it's there
     let token;
@@ -192,10 +200,11 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 })
 
 //only for rendered pages, has no errors
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
    
     if(req.cookies.jwt){
-       const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.SECRET)
+   try{
+    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.SECRET)
 
 
     //check user existance
@@ -213,6 +222,11 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     //if there is a logged in user
     res.locals.user=freshUser
     return next()
+   }
+   catch(error){
+       return next()
+   }
+    
 }
 next()
-})
+}

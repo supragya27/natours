@@ -1,4 +1,4 @@
-export const displayMap ={locations} =>{
+export const displayMap =(locations) =>{
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3VwcmFneWEyNyIsImEiOiJja2czY3dzZG0wOWY3MzNwNDRqdTF0d290In0.m6V2Wd932A0LBHl0_DMUyQ';
 
     var map = new mapboxgl.Map({

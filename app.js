@@ -75,11 +75,11 @@ app.use(hpp({
 ))
 
 //test middleware
-app.use((req,res,next)=>{
-  req.requestTime=new Date().toISOString()
-  console.log(req.cookies);
-  next()
-})
+// app.use((req,res,next)=>{
+//   req.requestTime=new Date().toISOString()
+//   console.log(req.cookies);
+//   next()
+// })
 
 //routes
 app.use('/', viewRouter);
