@@ -8583,37 +8583,36 @@ var updateSettings = /*#__PURE__*/function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log('in');
-            _context.prev = 1;
+            _context.prev = 0;
             url = type === 'password' ? '/api/v1/users/updatePassword' : '/api/v1/users/updateMe';
-            _context.next = 5;
+            _context.next = 4;
             return (0, _axios.default)({
               method: 'PATCH',
               url: url,
               data: data
             });
 
-          case 5:
+          case 4:
             res = _context.sent;
 
             if (res.data.status === 'success') {
               (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully!"));
             }
 
-            _context.next = 12;
+            _context.next = 11;
             break;
 
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](1);
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context["catch"](0);
             (0, _alerts.showAlert)('error', _context.t0.response.data.message);
 
-          case 12:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[1, 9]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function updateSettings(_x, _x2) {
@@ -8922,10 +8921,9 @@ if (userDataForm) {
   });
 }
 
-if (userPasswordForm && document.getElementById('password-current').value !== "") {
-  userDataForm.addEventListener('submit', function (e) {
+if (userPasswordForm) {
+  document.getElementById('savepwdbtn').addEventListener('click', function (e) {
     e.preventDefault();
-    document.querySelector('.btn--save-password').textContent = 'Updating...';
     var passwordOld = document.getElementById('password-current').value;
     var password = document.getElementById('password').value;
     var passwordConfirm = document.getElementById('password-confirm').value;
@@ -8934,7 +8932,6 @@ if (userPasswordForm && document.getElementById('password-current').value !== ""
       password: password,
       passwordConfirm: passwordConfirm
     }, 'password');
-    document.querySelector('.btn--save-password').textContent = 'Save password';
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
@@ -8968,7 +8965,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54748" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64576" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -36,17 +36,15 @@ loginForm.addEventListener('submit',e=>{
      })
  }
 
- if(userPasswordForm && document.getElementById('password-current').value!=="")
+ if(userPasswordForm)
  {
-     userDataForm.addEventListener('submit',e=>{
+         document.getElementById('savepwdbtn').addEventListener('click',e=>{
          e.preventDefault()
-         document.querySelector('.btn--save-password').textContent = 'Updating...';
 
          const passwordOld=document.getElementById('password-current').value
          const password=document.getElementById('password').value
          const passwordConfirm=document.getElementById('password-confirm').value
          updateSettings({passwordOld,password,passwordConfirm},'password')
-         document.querySelector('.btn--save-password').textContent = 'Save password';
          document.getElementById('password-current').value = '';
          document.getElementById('password').value = '';
          document.getElementById('password-confirm').value = '';

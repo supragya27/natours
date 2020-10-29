@@ -3,7 +3,6 @@ import { showAlert } from './alerts';
 
 //type: password/data
 export const updateSettings=async (data,type)=>{
-    console.log('in');
     try {
         const url= type === 'password' ? '/api/v1/users/updatePassword' : '/api/v1/users/updateMe'
         
