@@ -1,3 +1,3 @@
 # natours
 
-a MongoDB, Express.js and Node.js project made with the help of a Udemy course.
+Natours (Nature+Tours) is a MEN (MongoDB, express.js, node,js) based project, where the backend of a travelling company has been built.
